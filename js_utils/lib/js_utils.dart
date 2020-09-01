@@ -1,7 +1,5 @@
 library tekartik_js_utils.js_utils;
 
-import 'package:tekartik_common_utils/async_utils.dart';
-
 import 'src/js_utils/js_converter.dart' as js_converter;
 
 export 'src/js_utils/js_converter.dart'
