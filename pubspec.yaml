@@ -1,0 +1,16 @@
+name: tekartik_js_utils_repo
+description: js_utils repo (tools)
+version: 0.2.0
+publish_to: none
+#homepage: https://www.example.com
+#author: alex <email@example.com>
+
+environment:
+  sdk: '>=2.8.0 <3.0.0'
+
+dev_dependencies:
+  test: ">=1.2.0"
+  dev_test: any
+  grinder: any
+  process_run:
+

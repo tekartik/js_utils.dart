@@ -1,8 +1,8 @@
 name: tekartik_js_utils
 version: 0.1.0
-description: Browser utils
+description: Javascript utils
 author: Alexandre Roux <alex@tekartik.com>
-homepage: https://github.com/tekartik/browser_utils.dart
+homepage: https://github.com/tekartik/js_utils.dart
 deploy_to: none
 environment:
   sdk: '>=2.8.0 <3.0.0'
