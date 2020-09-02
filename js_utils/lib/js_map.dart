@@ -3,7 +3,7 @@
 //    https://github.com/dart-lang/sdk/issues/28194#issuecomment-269051789
 
 @JS()
-library jsmap;
+library tekartik_js_utils.js_map;
 
 import 'dart:collection';
 

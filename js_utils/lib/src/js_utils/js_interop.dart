@@ -1,5 +1,5 @@
 @JS()
-library tekartik_js_utils.js_interop;
+library tekartik_js_utils.src.js_utils.js_interop;
 
 import 'package:js/js.dart';
 
