@@ -29,6 +29,16 @@ class WithIntValue {
   external factory WithIntValue({int value});
 }
 
+@JS()
+@anonymous
+class WithMapValue {
+  external WithIntValue get value;
+
+  external set value(WithIntValue value);
+
+  external factory WithMapValue({WithIntValue value});
+}
+
 void main() {
   group('JsObject', () {
     test('anonymous', () {
@@ -74,6 +84,9 @@ void main() {
       //TODO
       //expect(jsObjectAsMap(jsObject).toString(), '{test: {...}}');
       expect(jsObjectAsMap(jsObject).toString(), '{test: {test: {...}}}');
+
+      var parentValue = WithMapValue(value: WithIntValue(value: 183));
+      expect(jsObjectAsMap(parentValue).toString(), '{value: {value: 183}}');
     });
 
     test('asList', () {

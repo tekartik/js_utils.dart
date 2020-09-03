@@ -1,4 +1,5 @@
 import 'package:js/js_util.dart';
+import 'package:tekartik_js_utils/js_utils_import.dart';
 
 import 'js_interop.dart';
 import 'js_utils.dart';
@@ -30,12 +31,24 @@ Map jsObjectAsMap(dynamic jsObject, {int depth}) {
   return converter.jsObjectToMap(jsObject, {}, depth: depth);
 }
 
+/// Returns `true` if the [value] is a very basic built-in type - e.g.
+/// [null], [num], [bool] or [String]. It returns `false` in the other case.
+bool _isBasicType(value) {
+  if (value == null || value is num || value is bool || value is String) {
+    return true;
+  }
+  return false;
+}
+
+/// Fixed in 2020-09-03
 bool jsIsCollection(dynamic jsObject) {
+  return !_isBasicType(jsObject);
+  /*
   return jsObject != null &&
       (jsObject is Iterable ||
           jsObject is Map ||
           isJsArray(jsObject) ||
-          isJsObject(jsObject));
+          isJsObject(jsObject));*/
 }
 
 bool jsIsList(dynamic jsObject) {
@@ -70,6 +83,7 @@ class _Converter {
     // Handle recursive objects
     for (var key in keys) {
       var value = getProperty(jsObject, key);
+      // devPrint('key $key value ${jsObjectKeys(value)}');
       if (jsIsCollection(value)) {
         // recursive
         value = jsObjectToCollection(value,
