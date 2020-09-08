@@ -2,7 +2,6 @@ import 'package:js/js_util.dart';
 import 'package:tekartik_js_utils/js_utils_import.dart';
 
 import 'js_interop.dart';
-import 'js_utils.dart';
 
 /// For JsObject of JsArray
 dynamic jsObjectAsCollection(dynamic jsObject, {int depth}) {
@@ -40,9 +39,16 @@ bool _isBasicType(value) {
   return false;
 }
 
+bool _isCollectionType(value) {
+  if (_isBasicType(value)) {
+    return false;
+  }
+  return true;
+}
+
 /// Fixed in 2020-09-03
 bool jsIsCollection(dynamic jsObject) {
-  return !_isBasicType(jsObject);
+  return _isCollectionType(jsObject);
   /*
   return jsObject != null &&
       (jsObject is Iterable ||
@@ -52,7 +58,7 @@ bool jsIsCollection(dynamic jsObject) {
 }
 
 bool jsIsList(dynamic jsObject) {
-  return jsObject is Iterable || isJsArray(jsObject);
+  return jsObject is Iterable; // || isJsArray(jsObject);
 }
 
 class _Converter {
@@ -62,6 +68,7 @@ class _Converter {
     if (jsCollections.containsKey(jsObject)) {
       return jsCollections[jsObject];
     }
+
     if (jsIsList(jsObject)) {
       // create the list before
       return jsArrayToList(jsObject as List, [], depth: depth);
