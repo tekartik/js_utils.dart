@@ -1,7 +1,3 @@
-// Wraps JSObjectImpl to allow key-value access, not available in js.dart 0.6.1
-// credit to @matanlurey and @a14n for helping me with this:
-//    https://github.com/dart-lang/sdk/issues/28194#issuecomment-269051789
-
 @JS()
 library tekartik_js_utils.js_map;
 
@@ -10,8 +6,7 @@ import 'dart:collection';
 import 'package:js/js.dart';
 import 'package:js/js_util.dart';
 
-@JS('Object.keys')
-external List<String> _getKeys(jsObject);
+import 'js_utils.dart';
 
 class JsMap<V> extends MapBase<String, dynamic> {
   final _jsObject;
@@ -38,7 +33,7 @@ class JsMap<V> extends MapBase<String, dynamic> {
   }
 
   @override
-  Iterable<String> get keys => _getKeys(_jsObject);
+  Iterable<String> get keys => jsObjectKeys(_jsObject);
 
   @override
   bool containsKey(Object key) => hasProperty(_jsObject, key);
