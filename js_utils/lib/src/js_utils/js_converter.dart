@@ -1,7 +1,7 @@
 import 'package:js/js_util.dart';
+import 'package:tekartik_js_utils/js_utils_import.dart';
 
 import 'js_interop.dart';
-import 'js_utils.dart';
 
 /// For JsObject of JsArray
 dynamic jsObjectAsCollection(dynamic jsObject, {int depth}) {
@@ -30,16 +30,35 @@ Map jsObjectAsMap(dynamic jsObject, {int depth}) {
   return converter.jsObjectToMap(jsObject, {}, depth: depth);
 }
 
+/// Returns `true` if the [value] is a very basic built-in type - e.g.
+/// [null], [num], [bool] or [String]. It returns `false` in the other case.
+bool _isBasicType(value) {
+  if (value == null || value is num || value is bool || value is String) {
+    return true;
+  }
+  return false;
+}
+
+bool _isCollectionType(value) {
+  if (_isBasicType(value)) {
+    return false;
+  }
+  return true;
+}
+
+/// Fixed in 2020-09-03
 bool jsIsCollection(dynamic jsObject) {
+  return _isCollectionType(jsObject);
+  /*
   return jsObject != null &&
       (jsObject is Iterable ||
           jsObject is Map ||
           isJsArray(jsObject) ||
-          isJsObject(jsObject));
+          isJsObject(jsObject));*/
 }
 
 bool jsIsList(dynamic jsObject) {
-  return jsObject is Iterable || isJsArray(jsObject);
+  return jsObject is Iterable; // || isJsArray(jsObject);
 }
 
 class _Converter {
@@ -49,6 +68,7 @@ class _Converter {
     if (jsCollections.containsKey(jsObject)) {
       return jsCollections[jsObject];
     }
+
     if (jsIsList(jsObject)) {
       // create the list before
       return jsArrayToList(jsObject as List, [], depth: depth);
@@ -70,6 +90,7 @@ class _Converter {
     // Handle recursive objects
     for (var key in keys) {
       var value = getProperty(jsObject, key);
+      // devPrint('key $key value ${jsObjectKeys(value)}');
       if (jsIsCollection(value)) {
         // recursive
         value = jsObjectToCollection(value,

@@ -1,6 +1,6 @@
 @TestOn('browser || node')
 @JS()
-library tekartik_js_utils.test.js_utils_browser_test;
+library tekartik_js_utils.test.js_utils_test;
 
 import 'package:dev_test/test.dart';
 import 'package:js/js.dart';
@@ -27,6 +27,16 @@ class WithIntValue {
   external set value(int value);
 
   external factory WithIntValue({int value});
+}
+
+@JS()
+@anonymous
+class WithMapValue {
+  external WithIntValue get value;
+
+  external set value(WithIntValue value);
+
+  external factory WithMapValue({WithIntValue value});
 }
 
 void main() {
@@ -74,6 +84,9 @@ void main() {
       //TODO
       //expect(jsObjectAsMap(jsObject).toString(), '{test: {...}}');
       expect(jsObjectAsMap(jsObject).toString(), '{test: {test: {...}}}');
+
+      var parentValue = WithMapValue(value: WithIntValue(value: 183));
+      expect(jsObjectAsMap(parentValue).toString(), '{value: {value: 183}}');
     });
 
     test('asList', () {
