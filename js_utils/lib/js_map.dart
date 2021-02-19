@@ -9,7 +9,7 @@ import 'package:js/js_util.dart';
 import 'js_utils.dart';
 
 class JsMap<V> extends MapBase<String, dynamic> {
-  final _jsObject;
+  final Object _jsObject;
 
   JsMap(this._jsObject);
 
