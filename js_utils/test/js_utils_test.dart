@@ -100,9 +100,9 @@ void main() {
       testDart = [];
       testDart.add(testDart);
       expect(testDart.toString(), '[[...]]');
-      jsArray = jsify([]);
+      jsArray = jsify([]) as List;
       jsArray.add(jsArray);
-      expect(jsArrayAsList(jsArray as List?).toString(), '[[...]]');
+      expect(jsArrayAsList(jsArray).toString(), '[[...]]');
     });
 
     test('asCollection', () {
