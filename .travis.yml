@@ -14,7 +14,7 @@ before_install:
 script:
   - cd repo_support
   - dart pub get
-  - dart run tool/travis.dart
+  - dart run tool/run_ci.dart
 
 # Only building master means that we don't run two builds for each pull request.
 # branches:
