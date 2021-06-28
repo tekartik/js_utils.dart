@@ -1,7 +1,7 @@
 name: tekartik_js_utils
 version: 0.2.0-nullsafety.0
 description: Javascript utils
-author: Alexandre Roux <alex@tekartik.com>
+
 homepage: https://github.com/tekartik/js_utils.dart
 publish_to: none
 environment:
