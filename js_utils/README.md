@@ -8,9 +8,9 @@ Javascript utilities
 dependencies:
   tekartik_js_utils:
     git:
-      url: git://github.com/tekartik/js_utils.dart
+      url: https://github.com/tekartik/js_utils.dart
       path: js_utils
-      ref: dart2
+      ref: dart2_3
     version: '>=0.1.0'
 ```
 
