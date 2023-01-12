@@ -9,16 +9,18 @@ import 'package:js/js_util.dart';
 import 'js_utils.dart';
 
 class JsMap<V> extends MapBase<String, dynamic> {
-  final Object? _jsObject;
+  late final Object? _jsObject;
 
-  JsMap(this._jsObject);
+  JsMap(Object? jsObject) {
+    _jsObject = jsObject;
+  }
 
   @override
   V? operator [](Object? key) {
-    dynamic prop = getProperty(_jsObject!, key.toString());
+    var prop = getProperty<Object?>(_jsObject!, key.toString());
 
     // if the map is not generic
-    if (V == dynamic) prop = JsMap(prop);
+    if (V == dynamic) prop = JsMap<Object?>(prop);
 
     return prop as V?;
   }

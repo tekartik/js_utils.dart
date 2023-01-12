@@ -9,7 +9,7 @@ String jsRuntimeType(Object jsObject) {
   if (constructor == null) {
     throw 'no constructor for ${jsObjectKeys(jsObject)}';
   }
-  return getProperty(constructor, 'name').toString();
+  return getProperty<Object?>(constructor, 'name').toString();
 }
 
 bool isJsArray(Object jsObject) {
