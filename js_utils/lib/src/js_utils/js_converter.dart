@@ -4,30 +4,46 @@ import 'package:tekartik_js_utils/js_utils_import.dart';
 import 'js_interop.dart';
 
 /// For JsObject of JsArray
-dynamic jsObjectAsCollection(dynamic jsObject, {int? depth}) {
+Object? jsObjectAsCollection(Object? jsObject, {int? depth}) =>
+    jsObjectAsCollectionOrNull(jsObject, depth: depth);
+
+/// For JsObject of JsArray
+Object? jsObjectAsCollectionOrNull(Object? jsObject, {int? depth}) {
   if (jsObject is List) {
     return jsArrayAsList(jsObject, depth: depth);
   }
-  return jsObjectAsMap(jsObject, depth: depth);
+  return jsObjectAsMapOrNull(jsObject, depth: depth);
 }
 
-List? jsArrayAsList(List? jsArray, {int? depth}) {
+List? jsArrayAsListOrNull(List? jsArray, {int? depth}) {
   if (jsArray == null) {
     return null;
   }
+  return jsArrayAsListOrThrow(jsArray, depth: depth);
+}
+
+List jsArrayAsListOrThrow(List jsArray, {int? depth}) {
   var converter = _Converter();
   return converter.jsArrayToList(jsArray, [], depth: depth);
 }
 
+// Prefer jsArrayAsListOrNull or jsArrayAsListOrThrow
+List? jsArrayAsList(List? jsArray, {int? depth}) =>
+    jsArrayAsListOrNull(jsArray, depth: depth);
+
 ///
 /// Handle element already in jsCollections
 ///
-Map? jsObjectAsMap(Object? jsObject, {int? depth}) {
+Map jsObjectAsMap(Object jsObject, {int? depth}) {
+  var converter = _Converter();
+  return converter.jsObjectToMap(jsObject, {}, depth: depth);
+}
+
+Map? jsObjectAsMapOrNull(Object? jsObject, {int? depth}) {
   if (jsObject == null) {
     return null;
   }
-  var converter = _Converter();
-  return converter.jsObjectToMap(jsObject, {}, depth: depth);
+  return jsObjectAsMap(jsObject, depth: depth);
 }
 
 /// Returns `true` if the [value] is a very basic built-in type - e.g.
