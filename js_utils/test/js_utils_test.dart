@@ -43,7 +43,7 @@ void main() {
   group('JsObject', () {
     test('anonymous', () {
       var withIntValue = WithIntValue();
-      expect(jsObjectKeys(withIntValue), []);
+      expect(jsObjectKeys(withIntValue), isEmpty);
       withIntValue.value = 1;
       expect(jsObjectKeys(withIntValue), ['value']);
       expect(withIntValue.value, 1);
@@ -60,13 +60,17 @@ void main() {
 
     test('jsObjectAsMap', () {
       expect(jsObjectAsMap(null), null);
+      expect(jsObjectAsMapOrNull(null), null);
       var jsObject = newObject() as Object;
-      expect(jsObjectAsMap(jsObject), {});
+      expect(jsObjectAsMap(jsObject), isEmpty);
+      expect(jsObjectAsMapOrThrow(jsObject), isEmpty);
       setProperty(jsObject, 'value', 1);
       expect(jsObjectAsMap(jsObject), {'value': 1});
+      expect(jsObjectAsMapOrNull(jsObject), {'value': 1});
+      expect(jsObjectAsMapOrThrow(jsObject), {'value': 1});
 
       var withIntValue = WithIntValue();
-      expect(jsObjectAsMap(withIntValue), {});
+      expect(jsObjectAsMap(withIntValue), isEmpty);
       withIntValue.value = 1;
       expect(jsObjectAsMap(withIntValue), {'value': 1});
     });
@@ -114,11 +118,14 @@ void main() {
       final list2 = [list1, map2];
       expect(jsObjectAsCollection(jsify(map2)), map2);
       expect(jsObjectAsCollection(jsify(list2)), list2);
+      expect(jsObjectAsCollectionOrNull(jsify(map2)), map2);
+      expect(jsObjectAsCollectionOrNull(jsify(list2)), list2);
     });
 
     test('asCollectionDepth', () {
       expect(jsObjectAsCollection(null, depth: 0), isNull);
       expect(jsObjectAsCollection(null, depth: 1), isNull);
+      expect(jsObjectAsCollectionOrNull(null, depth: 1), isNull);
 
       var map1 = {'int': 1, 'string': 'text'};
       var list1 = [1, 'test', null, 1.1, map1];
@@ -132,6 +139,10 @@ void main() {
         'list1': ['..']
       });
       expect(jsObjectAsCollection(jsify(list2), depth: 1), [
+        ['..'],
+        {'.': '.'}
+      ]);
+      expect(jsObjectAsCollectionOrNull(jsify(list2), depth: 1), [
         ['..'],
         {'.': '.'}
       ]);
