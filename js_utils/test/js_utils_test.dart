@@ -1,4 +1,4 @@
-@TestOn('browser || node')
+@TestOn('js')
 @JS()
 library tekartik_js_utils.test.js_utils_test;
 
