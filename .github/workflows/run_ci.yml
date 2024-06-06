@@ -31,6 +31,9 @@ jobs:
       - uses: dart-lang/setup-dart@v1.4
         with:
           sdk: ${{ matrix.dart }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
       - run: dart --version
       - run: dart pub get
       - run: dart run tool/run_ci.dart
