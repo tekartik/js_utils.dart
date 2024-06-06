@@ -5,7 +5,7 @@ description: Javascript utils
 homepage: https://github.com/tekartik/js_utils.dart
 publish_to: none
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: '>=3.4.0-0 <4.0.0'
 dependencies:
   synchronized: '>=2.0.0'
   js: '>=0.6.2'
