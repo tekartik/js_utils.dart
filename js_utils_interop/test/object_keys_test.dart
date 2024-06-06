@@ -4,6 +4,7 @@ library;
 import 'dart:js_interop';
 
 import 'package:tekartik_js_utils_interop/object_keys.dart';
+
 import 'package:test/test.dart';
 
 void main() {
@@ -11,6 +12,7 @@ void main() {
     test('jsObjectKeys', () {
       var map = {'one': 1, 'two': 2};
       expect(jsObjectKeys(map.jsify()!), ['one', 'two']);
+      expect(jsObjectGetOwnPropertyNames(map.jsify()!), ['one', 'two']);
     });
   });
 }
