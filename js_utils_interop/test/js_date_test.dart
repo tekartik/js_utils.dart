@@ -10,6 +10,8 @@ void main() {
   group('JSDate', () {
     test('JSDate', () async {
       var jsDate = JSDate(1);
+      // True since dart 3.4!
+      expect(jsDate, isA<JSDate>());
       expect(jsDate.toISOString(), '1970-01-01T00:00:00.001Z');
       expect(jsDate.getTime(), 1);
       expect(jsDate.isJSDate, isTrue);
@@ -19,11 +21,7 @@ void main() {
       expect(dartDate, DateTime.fromMillisecondsSinceEpoch(1, isUtc: true));
 
       var jsDateFromDart = dartDate.toJS;
-      expect(jsDateFromDart.toISOString(), '1970-01-01T00:00:00.001Z');
-      expect(jsDateFromDart.getTime(), 1);
-      expect(jsDateFromDart.isJSDate, isTrue);
-
-      jsDateFromDart = dartDate.toJS;
+      expect(jsDateFromDart, isA<JSDate>());
       expect(jsDateFromDart.toISOString(), '1970-01-01T00:00:00.001Z');
       expect(jsDateFromDart.getTime(), 1);
       expect(jsDateFromDart.isJSDate, isTrue);
