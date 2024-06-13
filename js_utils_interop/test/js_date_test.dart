@@ -50,5 +50,9 @@ void main() {
         expect(rawDartDate, isNot(isA<DateTime>()));
       }
     });
+    test('now', () {
+      var now = JSDate.now();
+      expect(now.toDart.isUtc, isTrue);
+    });
   });
 }

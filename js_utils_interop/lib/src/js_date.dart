@@ -6,6 +6,9 @@ extension type JSDate._(JSObject _) implements JSObject {
   /// Create a JavaScript date object
   external factory JSDate(int value);
 
+  /// Create a JavaScript date object at now.
+  external factory JSDate.now();
+
   /// Convert JavaScript date object to ISO string
   external String toISOString();
 
