@@ -17,8 +17,9 @@ include: package:lints/recommended.yaml
 
 linter:
   rules:
-    - avoid_print
-    - public_member_api_docs
+    avoid_print: true
+    public_member_api_docs: true
+    # invalid_runtime_check_with_js_interop_types: true
 
 # analyzer:
 #   exclude:
