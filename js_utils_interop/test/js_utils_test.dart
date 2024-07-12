@@ -170,4 +170,16 @@ void main() {
     expect(jsCustomType.isA<CustomType>(), isFalse);
     expect(jsCustomType.isA<js.JSObject>(), isTrue);
   });
+  test('Object', () {
+    var object = Object();
+    expect(object, isNot(isA<js.JSObject>()));
+    expect('test', isNot(isA<js.JSObject>()));
+    // expect('test'.toJS, isNot(isA<js.JSObject>())); true for wasm
+    expect({'test': 1}, isNot(isA<js.JSObject>()));
+    expect({'test': 1}.jsify(), isA<js.JSObject>());
+    //expect([1], isA<js.JSObject>()); // List is a JSObject on web (not wasm)
+    expect([1].jsify(), isA<js.JSObject>());
+    var jsObject = js.JSObject();
+    expect(jsObject, isA<js.JSObject>());
+  });
 }
