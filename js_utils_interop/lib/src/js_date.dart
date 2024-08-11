@@ -8,12 +8,6 @@ extension type JSDate._(JSObject _) implements JSObject {
 
   /// Create a JavaScript date object at now.
   external factory JSDate.now();
-
-  /// Convert JavaScript date object to ISO string
-  external String toISOString();
-
-  /// Convert JavaScript date object to milliseconds since epoch
-  external int getTime();
 }
 
 /// Conversions from [JSDate] to [DateTime].
@@ -21,6 +15,12 @@ extension JSDateExt on JSDate {
   /// to utc date
   DateTime get toDart =>
       DateTime.fromMillisecondsSinceEpoch(getTime(), isUtc: true);
+
+  /// Convert JavaScript date object to ISO string
+  external String toISOString();
+
+  /// Convert JavaScript date object to milliseconds since epoch
+  external int getTime();
 }
 
 /// Conversions from [DateTime] to [JSDate].

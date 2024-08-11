@@ -4,9 +4,9 @@ library;
 import 'dart:js_interop' as js;
 import 'dart:js_interop_unsafe' as js;
 
+import 'package:tekartik_js_utils_interop/js_converter.dart';
 import 'package:tekartik_js_utils_interop/js_date.dart';
 import 'package:tekartik_js_utils_interop/object_keys.dart';
-import 'package:tekartik_js_utils_interop/js_converter.dart';
 import 'package:tekartik_js_utils_interop/src/js_converter.dart'
     show anyToJsAny;
 import 'package:test/test.dart';
@@ -87,7 +87,7 @@ void main() {
       var jsObject = {'test': 'value'}.jsify();
       expect(jsAnyDebugRuntimeType(jsObject), 'Object');
 
-      var jsArray = [].jsify();
+      var jsArray = <int>[].jsify();
       expect(jsAnyDebugRuntimeType(jsArray), 'Array');
 
       expect(jsAnyDebugRuntimeType(JSDate.now()), 'Date');
@@ -120,7 +120,7 @@ void main() {
       testDart = {};
       testDart['test'] = testDart;
       expect(testDart.toString(), '{test: {...}}');
-      jsObject = {}.jsify() as js.JSObject;
+      jsObject = <String, Object?>{}.jsify() as js.JSObject;
       jsObject.setProperty('test'.toJS, jsObject);
 
       //TODO
@@ -140,7 +140,7 @@ void main() {
       testDart = [];
       testDart.add(testDart);
       expect(testDart.toString(), '[[...]]');
-      jsArray = [].jsify() as js.JSArray;
+      jsArray = <int>[].jsify() as js.JSArray;
       jsArray.setProperty(1.toJS, jsArray);
       expect(jsArrayAsList(jsArray).toString(), '[null, [...]]');
     });
@@ -152,7 +152,7 @@ void main() {
       expect(jsAnyAsCollectionOrNull([1.toJS].toJS), list);
       expect(jsAnyAsCollectionOrNull(anyToJsAny(list)), list);
       expect(jsAnyAsCollectionOrNull(list.jsify()), list);
-      Map map = {'test': 1};
+      var map = <String, Object?>{'test': 1};
       expect(jsAnyAsCollectionOrNull(map.jsify()), map);
       map = {
         'test': [1]
@@ -204,8 +204,8 @@ void main() {
 
     test('toDebugString', () {
       expect(jsAnyToDebugString(null), null);
-      expect(jsAnyToDebugString({}.jsify()), '{}');
-      expect(jsAnyToDebugString([].jsify()), '[]');
+      expect(jsAnyToDebugString(<String, Object?>{}.jsify()), '{}');
+      expect(jsAnyToDebugString(<int>[].jsify()), '[]');
     });
   });
 }

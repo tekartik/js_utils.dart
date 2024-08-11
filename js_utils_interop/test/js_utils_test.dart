@@ -57,12 +57,12 @@ void main() {
   test('is JSString', () {
     if (kDartIsWeb) {
       if (kDartIsWebWasm) {
-        expect(1.toJS is js.JSString, isTrue);
+        expect(1.toJS.isA<js.JSString>(), isTrue);
       } else {
-        expect(1.toJS is js.JSString, isFalse);
+        expect(1.toJS.isA<js.JSString>(), isFalse);
       }
     } else {
-      expect(1.toJS is js.JSString, isTrue);
+      expect(1.toJS.isA<js.JSString>(), isTrue);
     }
   });
   test('JSString', () {

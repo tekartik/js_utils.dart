@@ -10,6 +10,9 @@ void main() {
   group('JSDate', () {
     test('JSDate', () async {
       var jsDate = JSDate(1);
+
+      expect(jsDate.isA<JSDate>(), isTrue);
+      expect(jsDate.isA<JSObject>(), isTrue);
       // True since dart 3.4!
       expect(jsDate, isA<JSDate>());
       expect(jsDate.toISOString(), '1970-01-01T00:00:00.001Z');

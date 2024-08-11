@@ -105,7 +105,7 @@ class _Converter {
 
   Object jsObjectToCollection(js.JSObject jsObject, {int? depth}) {
     if (jsCollections.containsKey(jsObject)) {
-      return jsCollections[jsObject]!;
+      return jsCollections[jsObject] as Object;
     }
 
     if (jsIsList(jsObject)) {
@@ -180,7 +180,7 @@ Object? _convertAnySimpleValue(js.JSAny? jsAny) {
     return (jsAny as js.JSNumber).toDartNum;
   } else if (jsAny.isA<js.JSBoolean>()) {
     return (jsAny as js.JSBoolean).toDart;
-  } else if (jsAny is js.JSFunction) {
+  } else if (jsAny.isA<js.JSFunction>()) {
     return '(function)';
   } else if (jsAny.isA<js.JSObject>()) {
     // return jsAnyDebugRuntimeType(jsAny);
