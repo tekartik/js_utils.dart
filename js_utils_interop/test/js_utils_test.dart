@@ -54,22 +54,15 @@ void main() {
     expect(1.5.toJS.isJSString, isFalse);
     expect({'test': 1}.jsify()?.isJSString, isFalse);
   });
-  test('is JSString', () {
-    if (kDartIsWeb) {
-      if (kDartIsWebWasm) {
-        expect(1.toJS.isA<js.JSString>(), isTrue);
-      } else {
-        expect(1.toJS.isA<js.JSString>(), isFalse);
-      }
-    } else {
-      expect(1.toJS.isA<js.JSString>(), isTrue);
-    }
+  test('isA<JSString>()', () {
+    expect(1.toJS.isA<js.JSString>(), isFalse);
   });
   test('JSString', () {
     var jsString = 'test'.toJS;
     expect(jsString.isJSString, isTrue);
     var dartString = jsString.dartify();
     expect(dartString, isA<String>());
+    expect(jsString.isA<js.JSString>(), isTrue);
     expect(dartString, 'test');
     var jsStringFromDart = dartString.jsify() as js.JSString;
     expect(jsStringFromDart.toDart, 'test');
