@@ -1,5 +1,5 @@
 @JS()
-library tekartik_js_utils.js_map;
+library;
 
 import 'dart:collection';
 

@@ -1,6 +1,6 @@
 @TestOn('js')
 @JS()
-library tekartik_js_utils.test.js_utils_test;
+library;
 
 import 'package:js/js.dart';
 import 'package:js/js_util.dart';
