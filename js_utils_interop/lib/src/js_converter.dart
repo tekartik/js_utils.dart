@@ -100,14 +100,34 @@ bool jsIsList(js.JSAny? jsObject) {
   return jsObject.isA<js.JSArray>(); // || isJsArray(jsObject);
 }
 
+/// Check if the object has an hash code,
+/// it fails for functions
+bool _checkHasHashCode(js.JSAny jsAny) {
+  try {
+    jsAny.hashCode;
+    return true;
+  } catch (_, __) {
+    // Cannot add property Symbol(_identityHashCode), object is not extensible dart:sdk_internal
+    // This happens for Type error
+    // JSNoSuchMethodError i;
+    // Cannot add property Symbol(_identityHashCode), object is not extensible dart:sdk_internal
+    // print('weird error error $_ (${_.runtimeType})');
+    // print('object $jsObject ${jsObject.runtimeType}');
+    // print(__);
+    return false;
+  }
+}
+
 class _Converter {
   Map<dynamic, dynamic> jsCollections = {};
+  var jsObjectsNoHashCode = <js.JSObject>[];
 
   Object jsObjectToCollection(js.JSObject jsObject, {int? depth}) {
-    if (jsCollections.containsKey(jsObject)) {
-      return jsCollections[jsObject] as Object;
+    if (_checkHasHashCode(jsObject)) {
+      if (jsCollections.containsKey(jsObject)) {
+        return jsCollections[jsObject] as Object;
+      }
     }
-
     if (jsIsList(jsObject)) {
       // create the list before
       return jsArrayToList(jsObject as js.JSArray, [], depth: depth);
@@ -120,7 +140,9 @@ class _Converter {
   Map<String, Object?> jsObjectToMap(
       js.JSObject jsObject, Map<String, Object?> map,
       {int? depth}) {
-    jsCollections[jsObject] = map;
+    if (_checkHasHashCode(jsObject)) {
+      jsCollections[jsObject] = map;
+    }
     final keys = jsObjectKeys(jsObject);
 
     // Stop
