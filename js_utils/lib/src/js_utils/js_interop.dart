@@ -1,7 +1,4 @@
-@JS()
+@Deprecated('Do not use')
 library;
 
-import 'package:js/js.dart';
-
-@JS('Object.keys')
-external List<String> jsObjectKeys(Object obj);
+export 'js_interop_compat.dart';

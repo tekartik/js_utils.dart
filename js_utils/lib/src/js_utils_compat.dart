@@ -1,17 +1,7 @@
-@Deprecated('Do not use')
-library;
+// ignore_for_file: deprecated_member_use_from_same_package
 
-import 'src/js_utils/js_converter.dart' as js_converter;
-
-export 'src/js_utils/js_converter.dart'
-    show
-        jsArrayAsList,
-        jsObjectAsCollection,
-        jsObjectAsCollectionOrNull,
-        jsArrayAsListOrNull,
-        jsArrayAsListOrThrow;
-export 'src/js_utils/js_interop.dart';
-export 'src/js_utils/js_utils.dart' show jsRuntimeType;
+import 'package:tekartik_js_utils/src/js_utils/js_converter.dart'
+    as js_converter;
 
 Map<String, Object?>? jsObjectAsMapOrNull(Object? jsObject, {int? depth}) {
   return js_converter
