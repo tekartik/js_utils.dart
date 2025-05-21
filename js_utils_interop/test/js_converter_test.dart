@@ -43,24 +43,28 @@ void main() {
       expect(anyToJsAny([1]).dartify(), [1.toJS].toJS.dartify());
       expect(anyToJsAny([1]).dartify(), [1]);
       expect([1].jsify().dartify(), [1]);
-      expect(anyToJsAny({'test': 1}).dartify(),
-          (js.JSObject()..setProperty('test'.toJS, 1.toJS)).dartify());
+      expect(
+        anyToJsAny({'test': 1}).dartify(),
+        (js.JSObject()..setProperty('test'.toJS, 1.toJS)).dartify(),
+      );
       expect(anyToJsAny({'test': 1}).dartify(), {'test': 1});
       expect({'test': 1}.jsify().dartify(), {'test': 1});
       expect(
-          anyToJsAny([
-            {'test': 1}
-          ]).dartify(),
-          [js.JSObject()..setProperty('test'.toJS, 1.toJS)].toJS.dartify());
+        anyToJsAny([
+          {'test': 1},
+        ]).dartify(),
+        [js.JSObject()..setProperty('test'.toJS, 1.toJS)].toJS.dartify(),
+      );
       expect(
-          anyToJsAny([
-            {
-              'test': [1]
-            }
-          ]).dartify(),
-          [
-            js.JSObject()..setProperty('test'.toJS, [1.toJS].toJS)
-          ].toJS.dartify());
+        anyToJsAny([
+          {
+            'test': [1],
+          },
+        ]).dartify(),
+        [
+          js.JSObject()..setProperty('test'.toJS, [1.toJS].toJS),
+        ].toJS.dartify(),
+      );
       final map1 = {'int': 1, 'string': 'text'};
       final list1 = [1, 'test', null, 1.1, map1];
       final map2 = {'map1': map1, 'list1': list1};
@@ -155,7 +159,7 @@ void main() {
       var map = <String, Object?>{'test': 1};
       expect(jsAnyAsCollectionOrNull(map.jsify()), map);
       map = {
-        'test': [1]
+        'test': [1],
       };
       expect(jsAnyAsCollectionOrNull(map.jsify()), map);
 
@@ -181,25 +185,33 @@ void main() {
       expect(jsAnyAsCollectionOrNull(jsList2, depth: 0), ['..']);
       expect(jsAnyAsCollectionOrNull(jsMap2, depth: 1), {
         'map1': {'.': '.'},
-        'list1': ['..']
+        'list1': ['..'],
       });
       expect(jsAnyAsCollectionOrNull(jsList2, depth: 1), [
         ['..'],
-        {'.': '.'}
+        {'.': '.'},
       ]);
       expect(jsAnyAsCollectionOrNull(jsList2, depth: 1), [
         ['..'],
-        {'.': '.'}
+        {'.': '.'},
       ]);
-      expect(jsAnyToDebugString(jsList2),
-          '[[1, test, null, 1.1, {int: 1, string: text}], {map1: {int: 1, string: text}, list1: [1, test, null, 1.1, {int: 1, string: text}]}]');
-      expect(jsAnyToDebugString(jsList2, depth: 2),
-          '[[1, test, null, 1.1, {.: .}], {map1: {}, list1: [1, test, null, 1.1, {.: .}]}]');
-      expect(jsAnyToDebugString(jsList2, depth: 1), '[[..], {.: .}]');
-      expect(jsAnyToDebugString(jsMap2, depth: 2),
-          '{map1: {int: 1, string: text}, list1: [1, test, null, 1.1, {int: 1, string: text}]}');
       expect(
-          jsAnyToDebugString(jsMap2, depth: 1), '{map1: {.: .}, list1: [..]}');
+        jsAnyToDebugString(jsList2),
+        '[[1, test, null, 1.1, {int: 1, string: text}], {map1: {int: 1, string: text}, list1: [1, test, null, 1.1, {int: 1, string: text}]}]',
+      );
+      expect(
+        jsAnyToDebugString(jsList2, depth: 2),
+        '[[1, test, null, 1.1, {.: .}], {map1: {}, list1: [1, test, null, 1.1, {.: .}]}]',
+      );
+      expect(jsAnyToDebugString(jsList2, depth: 1), '[[..], {.: .}]');
+      expect(
+        jsAnyToDebugString(jsMap2, depth: 2),
+        '{map1: {int: 1, string: text}, list1: [1, test, null, 1.1, {int: 1, string: text}]}',
+      );
+      expect(
+        jsAnyToDebugString(jsMap2, depth: 1),
+        '{map1: {.: .}, list1: [..]}',
+      );
     });
 
     test('toDebugString', () {

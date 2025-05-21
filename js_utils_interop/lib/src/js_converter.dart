@@ -106,7 +106,7 @@ bool _checkHasHashCode(js.JSAny jsAny) {
   try {
     jsAny.hashCode;
     return true;
-  } catch (_, __) {
+  } catch (_, _) {
     // Cannot add property Symbol(_identityHashCode), object is not extensible dart:sdk_internal
     // This happens for Type error
     // JSNoSuchMethodError i;
@@ -138,8 +138,10 @@ class _Converter {
   }
 
   Map<String, Object?> jsObjectToMap(
-      js.JSObject jsObject, Map<String, Object?> map,
-      {int? depth}) {
+    js.JSObject jsObject,
+    Map<String, Object?> map, {
+    int? depth,
+  }) {
     if (_checkHasHashCode(jsObject)) {
       jsCollections[jsObject] = map;
     }
@@ -172,8 +174,10 @@ class _Converter {
     Object? dartValue;
     if (jsAnyIsCollection(value)) {
       // recursive
-      dartValue = jsObjectToCollection(value as js.JSObject,
-          depth: depth == null ? null : depth - 1);
+      dartValue = jsObjectToCollection(
+        value as js.JSObject,
+        depth: depth == null ? null : depth - 1,
+      );
     } else {
       dartValue = _convertAnySimpleValue(value)!;
     }
@@ -222,8 +226,10 @@ String? jsAnyToDebugString(js.JSAny? jsAny, {int? depth}) {
     return null;
   }
   if (jsAnyIsCollection(jsAny)) {
-    return jsAnyAsCollectionOrNull(jsAny as js.JSObject, depth: depth)
-        .toString();
+    return jsAnyAsCollectionOrNull(
+      jsAny as js.JSObject,
+      depth: depth,
+    ).toString();
   } else {
     return _convertAnySimpleValue(jsAny).toString();
   }

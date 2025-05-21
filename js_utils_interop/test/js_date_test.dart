@@ -35,7 +35,8 @@ void main() {
         expect(rawJisifiedDateTime, isA<DateTime>());
         // ignore: avoid_print
         print(
-            'rawJisifiedDateTime: $rawJisifiedDateTime ${rawJisifiedDateTime.runtimeType}');
+          'rawJisifiedDateTime: $rawJisifiedDateTime ${rawJisifiedDateTime.runtimeType}',
+        );
       } catch (e) {
         // ignore: avoid_print
         print('Temp DateTime().jisify bug fixed: $e');
@@ -47,7 +48,9 @@ void main() {
       if (isRunningAsJavascript) {
         expect(rawDartDate, isA<DateTime>());
         expect(
-            rawDartDate, DateTime.fromMillisecondsSinceEpoch(1, isUtc: true));
+          rawDartDate,
+          DateTime.fromMillisecondsSinceEpoch(1, isUtc: true),
+        );
       } else {
         // In wasm all numbers are double!
         expect(rawDartDate, isNot(isA<DateTime>()));
