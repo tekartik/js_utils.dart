@@ -111,8 +111,10 @@ class _Converter {
       // devPrint('key $key value ${jsObjectKeys(value)}');
       if (value != null && jsIsCollection(value)) {
         // recursive
-        value = jsObjectToCollection(value,
-            depth: depth == null ? null : depth - 1);
+        value = jsObjectToCollection(
+          value,
+          depth: depth == null ? null : depth - 1,
+        );
       }
       map[key] = value;
     }
@@ -127,8 +129,10 @@ class _Converter {
     for (var i = 0; i < jsArray!.length; i++) {
       var value = jsArray[i] as Object?;
       if (value != null && jsIsCollection(value)) {
-        value = jsObjectToCollection(value,
-            depth: depth == null ? null : depth - 1);
+        value = jsObjectToCollection(
+          value,
+          depth: depth == null ? null : depth - 1,
+        );
       }
       list.add(value);
     }
