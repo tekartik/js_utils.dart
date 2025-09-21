@@ -1,6 +1,3 @@
-# Intellij
-*.idea/
-*.iml
-
-# VS code
-.vscode/
+pubspec.lock
+.*
+!.gitignore

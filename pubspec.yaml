@@ -1,0 +1,8 @@
+name: _
+publish_to: none
+environment:
+  sdk: ^3.9.0
+workspace:
+  - js_utils
+  - js_utils_interop
+  - repo_support
