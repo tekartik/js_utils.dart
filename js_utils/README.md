@@ -10,7 +10,6 @@ dependencies:
     git:
       url: https://github.com/tekartik/js_utils.dart
       path: js_utils
-      ref: dart3a
     version: '>=0.1.0'
 ```
 
