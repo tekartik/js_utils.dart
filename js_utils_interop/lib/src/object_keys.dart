@@ -2,13 +2,26 @@ import 'dart:js_interop' as js;
 
 @js.JS('Object.getOwnPropertyNames')
 // ignore: unused_element
-external js.JSArray _jsObjectGetOwnPropertyNames(js.JSAny obj);
+external js.JSArray<js.JSString> _jsObjectGetOwnPropertyNames(js.JSAny obj);
 @js.JS('Object.keys')
-external js.JSArray _jsObjectKeys(js.JSAny obj);
+external js.JSArray<js.JSString> _jsObjectKeys(js.JSAny obj);
 
-extension on js.JSArray {
-  List<String> toDartStringList() =>
-      toDart.map((e) => (e as js.JSString).toDart).toList();
+/// Convert `JSArray<JSString>` to `List<String>`
+extension on js.JSArray<js.JSString> {
+  List<String> toDartStringList() => toDart.map((e) => e.toDart).toList();
+}
+
+/// JavaScript Object extension
+extension JSObjectKeysExtension on js.JSAny {
+  /// Convert to Dart List
+  List<String> getOwnPropertyNames() {
+    return _jsObjectGetOwnPropertyNames(this).toDartStringList();
+  }
+
+  /// Convert to Dart List
+  List<String> keys() {
+    return _jsObjectKeys(this).toDartStringList();
+  }
 }
 
 /// Get the keys of a js object
