@@ -29,7 +29,7 @@ js.JSAny? anyToJsAny(Object? value) {
     }
     return jsObject;
   }
-  throw 'not supported $value';
+  throw UnsupportedError('not supported $value');
 }
 
 /// For JsObject of JsArray if _isCollectionType
@@ -250,7 +250,7 @@ String jsAnyDebugRuntimeType(js.JSAny? jsAny) {
     var jsObject = jsAny as js.JSObject;
     var constructor = jsObject.getProperty('constructor'.toJS) as js.JSObject?;
     if (constructor == null) {
-      throw 'no constructor for ${jsObjectKeys(jsObject)}';
+      throw StateError('no constructor for ${jsObjectKeys(jsObject)}');
     }
     var name = (constructor.getProperty('name'.toJS) as js.JSString).toDart;
     return name;

@@ -9,7 +9,7 @@ const String jsObjectType = 'Object';
 String jsRuntimeType(Object jsObject) {
   var constructor = getProperty(jsObject, 'constructor') as Object?;
   if (constructor == null) {
-    throw 'no constructor for ${jsObjectKeys(jsObject)}';
+    throw StateError('no constructor for ${jsObjectKeys(jsObject)}');
   }
   return getProperty<Object?>(constructor, 'name').toString();
 }
