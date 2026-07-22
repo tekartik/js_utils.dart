@@ -2,6 +2,7 @@ import 'dart:js_interop';
 
 /// JavaScript Date
 @JS('Date')
+/// Extension type representing [JSDate].
 extension type JSDate._(JSObject _) implements JSObject {
   /// Create a JavaScript date object
   external factory JSDate(int value);

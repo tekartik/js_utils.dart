@@ -29,6 +29,7 @@ js.JSAny? anyToJsAny(Object? value) {
     }
     return jsObject;
   }
+
   throw UnsupportedError('not supported $value');
 }
 
@@ -37,6 +38,7 @@ Object jsObjectAsCollection(js.JSObject jsObject, {int? depth}) {
   if (jsIsList(jsObject)) {
     return jsArrayAsList(jsObject as js.JSArray, depth: depth);
   }
+
   return jsObjectAsMap(jsObject, depth: depth);
 }
 
@@ -54,9 +56,7 @@ List jsArrayAsList(js.JSArray jsArray, {int? depth}) {
   return converter.jsArrayToList(jsArray, [], depth: depth);
 }
 
-///
 /// Handle element already in jsCollections
-///
 Map<String, Object?> jsObjectAsMap(js.JSObject jsObject, {int? depth}) {
   var converter = _Converter();
   return converter.jsObjectToMap(jsObject, <String, Object?>{}, depth: depth);

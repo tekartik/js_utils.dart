@@ -33,9 +33,7 @@ List jsArrayAsListOrThrow(List jsArray, {int? depth}) {
 List? jsArrayAsList(List? jsArray, {int? depth}) =>
     jsArrayAsListOrNull(jsArray, depth: depth);
 
-///
 /// Handle element already in jsCollections
-///
 Map jsObjectAsMap(Object jsObject, {int? depth}) {
   var converter = _Converter();
   return converter.jsObjectToMap(jsObject, {}, depth: depth);
