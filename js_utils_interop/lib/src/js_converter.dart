@@ -106,7 +106,7 @@ bool _checkHasHashCode(js.JSAny jsAny) {
   try {
     jsAny.hashCode;
     return true;
-  } catch (_, _) {
+  } catch (_) {
     // Cannot add property Symbol(_identityHashCode), object is not extensible dart:sdk_internal
     // This happens for Type error
     // JSNoSuchMethodError i;
