@@ -5,6 +5,10 @@ import 'package:tekartik_common_utils/env_utils.dart';
 /// See https://github.com/dart-lang/sdk/issues/55203#issuecomment-2003246663
 num wasmDartifyNum(JSNumber value) {
   final jsDouble = value.toDartDouble;
+  // NaN and infinity cannot be truncated.
+  if (!jsDouble.isFinite) {
+    return jsDouble;
+  }
   final jsInt = jsDouble.truncate();
   return (jsInt.toDouble() == jsDouble) ? jsInt : jsDouble;
 }

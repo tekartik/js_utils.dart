@@ -55,5 +55,15 @@ void main() {
       expect(dartAnyInt, 1);
       expect(dartAnyInt, isA<int>());
     });
+
+    test('non finite', () {
+      for (var dartify in [wasmDartifyNum, jsDartifyNum]) {
+        expect(dartify(double.nan.toJS), isNaN);
+        expect(dartify(double.infinity.toJS), double.infinity);
+        expect(dartify(double.negativeInfinity.toJS), double.negativeInfinity);
+      }
+      expect(double.nan.toJS.toDartNum, isNaN);
+      expect(double.infinity.toJS.toDartNum, double.infinity);
+    });
   });
 }

@@ -95,13 +95,12 @@ class _Converter {
   }
 
   Map jsObjectToMap(Object jsObject, Map map, {int? depth}) {
-    jsCollections[jsObject] = map;
-    final keys = jsObjectKeys(jsObject);
-
-    // Stop
+    // Stop, before caching the map that would stay empty
     if (depth == 0) {
       return {'.': '.'};
     }
+    jsCollections[jsObject] = map;
+    final keys = jsObjectKeys(jsObject);
 
     // Handle recursive objects
     for (var key in keys) {

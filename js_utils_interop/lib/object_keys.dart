@@ -1,2 +1,6 @@
 export 'src/object_keys.dart'
-    show jsObjectKeys, jsObjectGetOwnPropertyNames, JSObjectKeysExtension;
+    show
+        jsObjectKeys,
+        jsObjectGetOwnPropertyNames,
+        jsObjectGetAllPropertyNames,
+        JSObjectKeysExtension;

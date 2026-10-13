@@ -187,7 +187,7 @@ void main() {
         'map1': {'.': '.'},
         'list1': ['..'],
       });
-      expect(jsAnyAsCollectionOrNull(jsList2, depth: 1), [
+      expect(jsObjectAsCollection(jsList2 as js.JSObject, depth: 1), [
         ['..'],
         {'.': '.'},
       ]);
@@ -201,7 +201,7 @@ void main() {
       );
       expect(
         jsAnyToDebugString(jsList2, depth: 2),
-        '[[1, test, null, 1.1, {.: .}], {map1: {}, list1: [1, test, null, 1.1, {.: .}]}]',
+        '[[1, test, null, 1.1, {.: .}], {map1: {.: .}, list1: [1, test, null, 1.1, {.: .}]}]',
       );
       expect(jsAnyToDebugString(jsList2, depth: 1), '[[..], {.: .}]');
       expect(
@@ -212,6 +212,29 @@ void main() {
         jsAnyToDebugString(jsMap2, depth: 1),
         '{map1: {.: .}, list1: [..]}',
       );
+    });
+
+    test('asMap depth shared object', () {
+      var shared = js.JSObject()..setProperty('p'.toJS, 1.toJS);
+      var jsObject = js.JSObject()
+        ..setProperty('a'.toJS, shared)
+        ..setProperty('b'.toJS, shared);
+      expect(jsObjectAsMap(jsObject, depth: 1), {
+        'a': {'.': '.'},
+        'b': {'.': '.'},
+      });
+      expect(jsObjectAsMap(jsObject, depth: 2), {
+        'a': {'p': 1},
+        'b': {'p': 1},
+      });
+    });
+
+    test('non finite numbers', () {
+      var jsObject = js.JSObject()
+        ..setProperty('nan'.toJS, double.nan.toJS)
+        ..setProperty('infinity'.toJS, double.infinity.toJS);
+      expect(jsObjectAsMap(jsObject)['nan'], isNaN);
+      expect(jsAnyToDebugString(jsObject), '{nan: NaN, infinity: Infinity}');
     });
 
     test('toDebugString', () {

@@ -43,10 +43,10 @@ extension type CustomType._(js.JSObject _) implements js.JSObject {
 }
 void main() {
   test('isJSFunction', () {
-    expect('text'.toJS.isJSString, isTrue);
-    expect(1.toJS.isJSString, isFalse);
-    expect(1.5.toJS.isJSString, isFalse);
-    expect({'test': 1}.jsify()?.isJSString, isFalse);
+    expect((() {}).toJS.isJSFunction, isTrue);
+    expect('text'.toJS.isJSFunction, isFalse);
+    expect(1.toJS.isJSFunction, isFalse);
+    expect({'test': 1}.jsify()?.isJSFunction, isFalse);
   });
   test('isJSString', () {
     expect('text'.toJS.isJSString, isTrue);

@@ -3,6 +3,7 @@ export 'src/js_converter.dart'
         jsArrayAsList,
         jsObjectAsCollection,
         jsObjectAsMap,
+        jsObjectToPropertyMap,
         jsAnyDebugRuntimeType,
         jsAnyIsCollection,
         jsAnyToDebugString,

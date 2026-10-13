@@ -142,15 +142,14 @@ class _Converter {
     Map<String, Object?> map, {
     int? depth,
   }) {
+    // Stop, before caching the map that would stay empty
+    if (depth == 0) {
+      return {'.': '.'};
+    }
     if (_checkHasHashCode(jsObject)) {
       jsCollections[jsObject] = map;
     }
     final keys = jsObjectKeys(jsObject);
-
-    // Stop
-    if (depth == 0) {
-      return {'.': '.'};
-    }
 
     // Handle recursive objects
     for (var key in keys) {
@@ -257,4 +256,76 @@ String jsAnyDebugRuntimeType(js.JSAny? jsAny) {
   } else {
     return '(unknown)';
   }
+}
+
+@js.JS('String')
+external js.JSString _jsString(js.JSAny? value);
+
+/// Json compatible map of the non function properties of [jsObject], own and
+/// inherited (see [jsObjectGetAllPropertyNames]), such as the ones of
+/// `navigator`.
+///
+/// Nested objects are converted up to [depth] levels (arrays do not count),
+/// deeper ones and the other values (bigint, symbol) use their JavaScript
+/// string representation. A property that cannot be read gets an
+/// `error: <error>` value.
+Map<String, Object?> jsObjectToPropertyMap(
+  js.JSObject jsObject, {
+  int depth = 2,
+}) => _jsObjectToPropertyMap(jsObject, depth, <js.JSArray>[]);
+
+/// [arrays] are the arrays being converted, to stop on cycles.
+Map<String, Object?> _jsObjectToPropertyMap(
+  js.JSObject jsObject,
+  int depth,
+  List<js.JSArray> arrays,
+) {
+  final map = <String, Object?>{};
+  for (var name in jsObjectGetAllPropertyNames(jsObject)) {
+    try {
+      final value = jsObject.getProperty<js.JSAny?>(name.toJS);
+      if (value.isA<js.JSFunction>()) {
+        continue;
+      }
+      map[name] = _jsAnyToPropertyValue(value, depth, arrays);
+    } catch (e) {
+      map[name] = 'error: $e';
+    }
+  }
+  return map;
+}
+
+Object? _jsAnyToPropertyValue(
+  js.JSAny? value,
+  int depth,
+  List<js.JSArray> arrays,
+) {
+  if (value == null) {
+    return null;
+  } else if (value.isA<js.JSString>()) {
+    return (value as js.JSString).toDart;
+  } else if (value.isA<js.JSNumber>()) {
+    return (value as js.JSNumber).toDartNum;
+  } else if (value.isA<js.JSBoolean>()) {
+    return (value as js.JSBoolean).toDart;
+  } else if (value.isA<js.JSFunction>()) {
+    return '(function)';
+  } else if (value.isA<js.JSArray>()) {
+    var array = value as js.JSArray;
+    if (arrays.any((other) => other.strictEquals(array).toDart)) {
+      return _jsString(array).toDart;
+    }
+    arrays.add(array);
+    try {
+      return [
+        for (var item in array.toDart)
+          _jsAnyToPropertyValue(item, depth, arrays),
+      ];
+    } finally {
+      arrays.removeLast();
+    }
+  } else if (value.isA<js.JSObject>() && depth > 0) {
+    return _jsObjectToPropertyMap(value as js.JSObject, depth - 1, arrays);
+  }
+  return _jsString(value).toDart;
 }

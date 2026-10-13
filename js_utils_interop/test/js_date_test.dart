@@ -29,18 +29,8 @@ void main() {
       expect(jsDateFromDart.getTime(), 1);
       expect(jsDateFromDart.isJSDate, isTrue);
 
-      // Temp bug!
-      try {
-        var rawJisifiedDateTime = dartDate.jsify();
-        expect(rawJisifiedDateTime, isA<DateTime>());
-        // ignore: avoid_print
-        print(
-          'rawJisifiedDateTime: $rawJisifiedDateTime ${rawJisifiedDateTime.runtimeType}',
-        );
-      } catch (e) {
-        // ignore: avoid_print
-        print('Temp DateTime().jisify bug fixed: $e');
-      }
+      // dartDate.jsify() does not give a JS Date (and differs between js and
+      // wasm), use dartDate.toJS.
 
       // Compare with dartify()! same as dartifyValue
       var rawDartDate = jsDate.dartify()!;
