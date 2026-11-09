@@ -77,12 +77,20 @@ bool jsIsList(Object jsObject) {
   return jsObject is Iterable; // || isJsArray(jsObject);
 }
 
+/// True if a conversion done with [cachedDepth] levels left can be reused
+/// where [depth] levels are left (null is unlimited).
+bool _cachedDepthIsEnough(int? cachedDepth, int? depth) =>
+    cachedDepth == null || (depth != null && cachedDepth >= depth);
+
 class _Converter {
-  Map<dynamic, dynamic> jsCollections = {};
+  /// Converted collections and the depth left when they were converted.
+  Map<dynamic, (Object, int?)> jsCollections = {};
 
   dynamic jsObjectToCollection(Object jsObject, {int? depth}) {
-    if (jsCollections.containsKey(jsObject)) {
-      return jsCollections[jsObject];
+    var cached = jsCollections[jsObject];
+    // An object met before with less depth left is converted again.
+    if (cached != null && _cachedDepthIsEnough(cached.$2, depth)) {
+      return cached.$1;
     }
 
     if (jsIsList(jsObject)) {
@@ -99,7 +107,7 @@ class _Converter {
     if (depth == 0) {
       return {'.': '.'};
     }
-    jsCollections[jsObject] = map;
+    jsCollections[jsObject] = (map, depth);
     final keys = jsObjectKeys(jsObject);
 
     // Handle recursive objects
@@ -122,7 +130,7 @@ class _Converter {
     if (depth == 0) {
       return ['..'];
     }
-    jsCollections[jsArray] = list;
+    jsCollections[jsArray] = (list, depth);
     for (var i = 0; i < jsArray!.length; i++) {
       var value = jsArray[i] as Object?;
       if (value != null && jsIsCollection(value)) {

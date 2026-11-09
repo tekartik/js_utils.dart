@@ -5,7 +5,9 @@ description: >-
   code (dart2js or dart2wasm) with tekartik_js_utils_interop: jsObjectAsMap,
   jsArrayAsList, jsObjectAsCollection, jsAnyAsCollectionOrNull,
   jsAnyIsCollection, jsAnyToDebugString, jsAnyDebugRuntimeType, jsObjectKeys,
-  jsObjectGetOwnPropertyNames, the JSDate extension type (toDart, toISOString,
+  jsObjectGetOwnPropertyNames, jsObjectGetAllPropertyNames,
+  jsObjectToPropertyMap (navigator like objects), the JSDate extension type
+  (toDart, toISOString,
   getTime, DateTime.toJS, isJSDate) and JSNumber.toDartNum, imported from
   js_converter.dart, object_keys.dart, js_date.dart and js_number.dart.
 ---
@@ -31,9 +33,14 @@ repo is the older `package:js` / `dart:js` one.
 * Four public libraries, each exporting a short list of names:
   * `package:tekartik_js_utils_interop/js_converter.dart`: `jsObjectAsMap`,
     `jsArrayAsList`, `jsObjectAsCollection`, `jsAnyAsCollectionOrNull`,
-    `jsAnyIsCollection`, `jsAnyToDebugString`, `jsAnyDebugRuntimeType`.
+    `jsAnyIsCollection`, `jsAnyToDebugString`, `jsAnyDebugRuntimeType`,
+    `jsObjectToPropertyMap` (json compatible map of the own and inherited
+    non function properties, such as the ones of `navigator`, `depth: 2`
+    by default).
   * `package:tekartik_js_utils_interop/object_keys.dart`: `jsObjectKeys`,
-    `jsObjectGetOwnPropertyNames`, `JSObjectKeysExtension` (`keys()`,
+    `jsObjectGetOwnPropertyNames`, `jsObjectGetAllPropertyNames` (own and
+    inherited, sorted, without the `Object.prototype` ones),
+    `JSObjectKeysExtension` (`keys()`,
     `getOwnPropertyNames()` on any `JSAny`).
   * `package:tekartik_js_utils_interop/js_date.dart`: `JSDate`, `JSDateExt`,
     `TekartikJsInteropDateTimeExt` (`DateTime.toJS`) and `JSDateAnyExt`
@@ -53,10 +60,13 @@ repo is the older `package:js` / `dart:js` one.
   * All of them take an optional `depth:`. `depth` counts down through nested
     collections: a truncated map becomes `{'.': '.'}` and a truncated list
     becomes `['..']`, so `depth: 0` on a map returns `{'.': '.'}`. Omit it for
-    a full conversion (recursive objects are handled by an identity cache).
+    a full conversion (recursive objects are handled by an identity cache:
+    the same Dart map is reused). With `depth`, an object referenced from
+    two places is converted with the depth left at each place.
 * These converters are lossy on purpose, for logging and for reading loosely
-  typed js results: a nested function becomes the string `'(function)'`, an
-  object that is neither array nor plain data becomes `'(object)'`. For a
+  typed js results: a nested function becomes the string `'(function)'`,
+  any other object (a `Date`, a class instance) is read from its own
+  enumerable keys (`{}` for a `Date`). For a
   faithful round trip of json-like data use `dartify()` / `jsify()` from
   `dart:js_interop` instead.
 * `jsAnyToDebugString(jsAny, {depth})` returns `null` for null and the

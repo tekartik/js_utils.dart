@@ -33,7 +33,7 @@ js.JSAny? anyToJsAny(Object? value) {
   throw UnsupportedError('not supported $value');
 }
 
-/// For JsObject of JsArray if _isCollectionType
+/// A `List` for a js array, a `Map` (see [jsObjectAsMap]) otherwise.
 Object jsObjectAsCollection(js.JSObject jsObject, {int? depth}) {
   if (jsIsList(jsObject)) {
     return jsArrayAsList(jsObject as js.JSArray, depth: depth);
@@ -42,7 +42,8 @@ Object jsObjectAsCollection(js.JSObject jsObject, {int? depth}) {
   return jsObjectAsMap(jsObject, depth: depth);
 }
 
-/// Null if not a collection
+/// The collection (see [jsObjectAsCollection]), null for null, a string, a
+/// number, a boolean or a function.
 Object? jsAnyAsCollectionOrNull(js.JSAny? jsObject, {int? depth}) {
   if (_isCollectionType(jsObject)) {
     return jsObjectAsCollection(jsObject as js.JSObject, depth: depth);
@@ -50,13 +51,18 @@ Object? jsAnyAsCollectionOrNull(js.JSAny? jsObject, {int? depth}) {
   return null;
 }
 
-/// JSArray conversion
+/// Converts a js array to a Dart list, see [jsObjectAsMap] for the items.
 List jsArrayAsList(js.JSArray jsArray, {int? depth}) {
   var converter = _Converter();
   return converter.jsArrayToList(jsArray, [], depth: depth);
 }
 
-/// Handle element already in jsCollections
+/// Converts the own enumerable properties of [jsObject] to a Dart map, for
+/// logs and loosely typed data (use `dartify()` for a json round trip).
+///
+/// Nested objects and arrays are converted too, a function becomes
+/// `'(function)'`. [depth] limits the nesting: a cut map is
+/// `{'.': '.'}`, a cut list `['..']`. Cycles reuse the same Dart map.
 Map<String, Object?> jsObjectAsMap(js.JSObject jsObject, {int? depth}) {
   var converter = _Converter();
   return converter.jsObjectToMap(jsObject, <String, Object?>{}, depth: depth);
@@ -118,14 +124,22 @@ bool _checkHasHashCode(js.JSAny jsAny) {
   }
 }
 
+/// True if a conversion done with [cachedDepth] levels left can be reused
+/// where [depth] levels are left (null is unlimited).
+bool _cachedDepthIsEnough(int? cachedDepth, int? depth) =>
+    cachedDepth == null || (depth != null && cachedDepth >= depth);
+
 class _Converter {
-  Map<dynamic, dynamic> jsCollections = {};
+  /// Converted collections and the depth left when they were converted.
+  Map<dynamic, (Object, int?)> jsCollections = {};
   var jsObjectsNoHashCode = <js.JSObject>[];
 
   Object jsObjectToCollection(js.JSObject jsObject, {int? depth}) {
     if (_checkHasHashCode(jsObject)) {
-      if (jsCollections.containsKey(jsObject)) {
-        return jsCollections[jsObject] as Object;
+      var cached = jsCollections[jsObject];
+      // An object met before with less depth left is converted again.
+      if (cached != null && _cachedDepthIsEnough(cached.$2, depth)) {
+        return cached.$1;
       }
     }
     if (jsIsList(jsObject)) {
@@ -147,7 +161,7 @@ class _Converter {
       return {'.': '.'};
     }
     if (_checkHasHashCode(jsObject)) {
-      jsCollections[jsObject] = map;
+      jsCollections[jsObject] = (map, depth);
     }
     final keys = jsObjectKeys(jsObject);
 
@@ -188,7 +202,7 @@ class _Converter {
       return ['..'];
     }
     var addedList = jsArray.toDart;
-    jsCollections[jsArray] = list;
+    jsCollections[jsArray] = (list, depth);
     for (var value in addedList) {
       list.add(_convertInnerOrNull(value, depth: depth));
     }
@@ -219,7 +233,8 @@ Object? _convertAnySimpleValue(js.JSAny? jsAny) {
   }
 }
 
-/// Any native type to a simple debug string
+/// Any js value to a debug string (null for null), collections converted
+/// with [jsObjectAsCollection] up to [depth].
 String? jsAnyToDebugString(js.JSAny? jsAny, {int? depth}) {
   if (jsAny == null) {
     return null;
